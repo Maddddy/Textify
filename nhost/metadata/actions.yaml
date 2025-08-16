@@ -1,0 +1,28 @@
+- name: sendMessage
+  definition:
+    kind: synchronous
+    handler: '{{NHOST_BACKEND_URL}}/actions/sendMessage'
+    forward_client_headers: true
+    headers:
+      - name: x-hasura-admin-secret
+        value: '{{NHOST_ADMIN_SECRET}}'
+  permissions:
+    - role: user
+      definition:
+        check:
+          chat_id:
+            _exists:
+              _table:
+                schema: public
+                name: chats
+              _where:
+                id:
+                  _eq: $chat_id
+                user_id:
+                  _eq: X-Hasura-User-Id
+  type: mutation
+  arguments:
+    - name: chat_id
+      type: uuid!
+    - name: message
+      type: String!
