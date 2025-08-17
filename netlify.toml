@@ -2,6 +2,11 @@
   command = "npm run build"
   publish = "frontend/build"
 
+# Secrets scanning configuration
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "frontend/env.example,.secrets"
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_NHOST_SUBDOMAIN,REACT_APP_NHOST_REGION,REACT_APP_OPENROUTER_API_KEY,REACT_APP_N8N_WEBHOOK_URL"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
