@@ -4,16 +4,16 @@ This guide addresses the high-priority issues that were preventing the applicati
 
 ## 🚨 High-Priority Issues (Fixed)
 
-### 1. Missing NHOST_BACKEND_URL Environment Variable
+### 1. Missing NHOST_FUNCTIONS_URL Environment Variable
 
-**Problem**: Hasura action `sendMessage` references `{{NHOST_BACKEND_URL}}/functions/v1/sendMessage` but that env var was not set.
+**Problem**: Hasura action `sendMessage` references `{{NHOST_FUNCTIONS_URL}}/functions/v1/sendMessage` but that env var was not set.
 
-**Solution**: Added `NHOST_BACKEND_URL` to `nhost/.secrets` file.
+**Solution**: Added `NHOST_FUNCTIONS_URL` to `nhost/.secrets` file.
 
 **What to do**:
 1. Copy `nhost/env.example` to `nhost/.secrets`
-2. Set `NHOST_BACKEND_URL=http://localhost:8888` (or check your `nhost up` output for the correct port)
-3. For cloud deployment: `NHOST_BACKEND_URL=https://your-project.nhost.run`
+2. Set `NHOST_FUNCTIONS_URL=http://localhost:8888` (or check your `nhost up` output for the correct port)
+3. For cloud deployment: `NHOST_FUNCTIONS_URL=https://your-project.nhost.run`
 
 ### 2. SendMessageResponse JSON Type Issue
 
@@ -49,7 +49,7 @@ nhost up
 **Required environment variables in `nhost/.secrets`**:
 ```env
 # REQUIRED: Functions base URL
-NHOST_BACKEND_URL=http://localhost:8888
+NHOST_FUNCTIONS_URL=http://localhost:8888
 
 # Hasura Configuration
 HASURA_GRAPHQL_ADMIN_SECRET=your-hasura-admin-secret
@@ -140,8 +140,8 @@ nhost logs functions
 
 ## 🚨 Common Error Messages & Solutions
 
-### "Value for environment variables not found: NHOST_BACKEND_URL"
-**Solution**: Add `NHOST_BACKEND_URL` to `nhost/.secrets`
+### "Value for environment variables not found: NHOST_FUNCTIONS_URL"
+**Solution**: Add `NHOST_FUNCTIONS_URL` to `nhost/.secrets`
 
 ### "the type JSON for field data in object type SendMessageResponse does not exist"
 **Solution**: Metadata has been fixed. Run `nhost push` to apply changes.
@@ -154,7 +154,7 @@ nhost logs functions
 
 ### "Function not found"
 **Solution**: 
-1. Check `NHOST_BACKEND_URL` is correct
+1. Check `NHOST_FUNCTIONS_URL` is correct
 2. Verify function is deployed: `nhost functions deploy`
 3. Check function logs: `nhost logs functions`
 
@@ -167,7 +167,7 @@ nhost push
 ```
 
 **Update environment variables in Nhost dashboard**:
-- `NHOST_BACKEND_URL`: `https://your-project.nhost.run`
+- `NHOST_FUNCTIONS_URL`: `https://your-project.nhost.run`
 - Other variables as needed
 
 ### Frontend (Netlify)
@@ -200,7 +200,7 @@ nhost push
 
 ## ✅ Checklist
 
-- [ ] `NHOST_BACKEND_URL` set in `nhost/.secrets`
+- [ ] `NHOST_FUNCTIONS_URL` set in `nhost/.secrets`
 - [ ] All required environment variables configured
 - [ ] Metadata applied (`nhost push`)
 - [ ] Functions deployed (`nhost functions deploy`)

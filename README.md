@@ -53,7 +53,7 @@ This will start:
 - Nhost Auth service
 - Local development environment
 
-**Important**: Make sure to set `NHOST_BACKEND_URL` in your `.secrets` file. For local development, this is typically `http://localhost:8888` (check your `nhost up` output for the exact port).
+**Important**: Make sure to set `NHOST_FUNCTIONS_URL` in your `.secrets` file. For local development, this is typically `http://localhost:8888` (check your `nhost up` output for the exact port).
 
 ### 3. Database Migration
 
@@ -80,7 +80,7 @@ Create `.secrets` in the `nhost` directory:
 
 ```env
 # Nhost Backend Configuration
-NHOST_BACKEND_URL=http://localhost:8888
+NHOST_FUNCTIONS_URL=http://localhost:8888
 
 # Hasura Configuration
 HASURA_GRAPHQL_ADMIN_SECRET=your-hasura-admin-secret
@@ -210,7 +210,7 @@ nhost push
 ## Environment Variables
 
 ### Backend (.secrets in nhost directory)
-- `NHOST_BACKEND_URL` - **REQUIRED**: Your functions base URL (local: http://localhost:8888, cloud: https://your-project.nhost.run)
+- `NHOST_FUNCTIONS_URL` - **REQUIRED**: Your functions base URL (local: http://localhost:8888, cloud: https://your-project.nhost.run)
 - `HASURA_GRAPHQL_ADMIN_SECRET` - Hasura admin secret
 - `HASURA_GRAPHQL_JWT_SECRET` - JWT signing secret
 - `NHOST_WEBHOOK_SECRET` - Nhost webhook secret
@@ -228,8 +228,8 @@ nhost push
 
 ### Common Issues
 
-1. **"Value for environment variables not found: NHOST_BACKEND_URL"**
-   - **Solution**: Add `NHOST_BACKEND_URL` to your `nhost/.secrets` file
+1. **"Value for environment variables not found: NHOST_FUNCTIONS_URL"**
+   - **Solution**: Add `NHOST_FUNCTIONS_URL` to your `nhost/.secrets` file
    - Set to `http://localhost:8888` for local development
    - Check `nhost up` output for the correct port
 
@@ -306,4 +306,4 @@ For support and questions:
 ### v1.0.1
 - Fixed Hasura action metadata inconsistency
 - Added proper environment variable documentation
-- Resolved NHOST_BACKEND_URL configuration issue
+- Resolved NHOST_FUNCTIONS_URL configuration issue
