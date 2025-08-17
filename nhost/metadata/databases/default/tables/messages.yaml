@@ -1,0 +1,63 @@
+table:
+  name: messages
+  schema: public
+  comment: "Individual messages within chat conversations"
+  columns:
+    - name: id
+      type: uuid
+      is_nullable: false
+      default_value: gen_random_uuid()
+      comment: "Unique identifier for the message"
+    - name: chat_id
+      type: uuid
+      is_nullable: false
+      comment: "ID of the chat this message belongs to"
+    - name: user_id
+      type: uuid
+      is_nullable: true
+      comment: "ID of the user who sent this message (null for AI messages)"
+    - name: content
+      type: text
+      is_nullable: false
+      comment: "Content of the message"
+    - name: role
+      type: text
+      is_nullable: false
+      comment: "Role of the message sender (user or assistant)"
+    - name: created_at
+      type: timestamptz
+      is_nullable: false
+      default_value: now()
+      comment: "When the message was created"
+  primary_key:
+    - id
+  foreign_keys:
+    - name: messages_chat_id_fkey
+      table:
+        name: chats
+        schema: public
+      columns:
+        - chat_id
+      referenced_columns:
+        - id
+      on_update: CASCADE
+      on_delete: CASCADE
+    - name: messages_user_id_fkey
+      table:
+        name: auth_users
+        schema: auth
+      columns:
+        - user_id
+      referenced_columns:
+        - id
+      on_update: CASCADE
+      on_delete: SET NULL
+  indexes:
+    - name: messages_chat_id_idx
+      columns:
+        - chat_id
+      comment: "Index for faster chat message lookups"
+    - name: messages_user_id_idx
+      columns:
+        - user_id
+      comment: "Index for faster user message lookups"

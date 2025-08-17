@@ -1,0 +1,46 @@
+table:
+  name: chats
+  schema: public
+  comment: "Chat conversations between users and AI"
+  columns:
+    - name: id
+      type: uuid
+      is_nullable: false
+      default_value: gen_random_uuid()
+      comment: "Unique identifier for the chat"
+    - name: user_id
+      type: uuid
+      is_nullable: false
+      comment: "ID of the user who owns this chat"
+    - name: title
+      type: text
+      is_nullable: true
+      comment: "Title of the chat conversation"
+    - name: created_at
+      type: timestamptz
+      is_nullable: false
+      default_value: now()
+      comment: "When the chat was created"
+    - name: updated_at
+      type: timestamptz
+      is_nullable: false
+      default_value: now()
+      comment: "When the chat was last updated"
+  primary_key:
+    - id
+  foreign_keys:
+    - name: chats_user_id_fkey
+      table:
+        name: auth_users
+        schema: auth
+      columns:
+        - user_id
+      referenced_columns:
+        - id
+      on_update: CASCADE
+      on_delete: CASCADE
+  indexes:
+    - name: chats_user_id_idx
+      columns:
+        - user_id
+      comment: "Index for faster user chat lookups"
