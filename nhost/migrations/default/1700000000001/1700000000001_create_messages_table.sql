@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "public"."messages" (
   "chat_id" uuid NOT NULL,
   "user_id" uuid NOT NULL,
   "content" text NOT NULL,
-  "is_bot" boolean NOT NULL DEFAULT false,
+  "role" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY ("id")
 );

@@ -14,8 +14,8 @@ table:
       comment: "ID of the chat this message belongs to"
     - name: user_id
       type: uuid
-      is_nullable: true
-      comment: "ID of the user who sent this message (null for AI messages)"
+      is_nullable: false
+      comment: "ID of the user who sent this message"
     - name: content
       type: text
       is_nullable: false
@@ -51,7 +51,7 @@ table:
       referenced_columns:
         - id
       on_update: CASCADE
-      on_delete: SET NULL
+      on_delete: CASCADE
   indexes:
     - name: messages_chat_id_idx
       columns:
@@ -61,3 +61,7 @@ table:
       columns:
         - user_id
       comment: "Index for faster user message lookups"
+    - name: messages_created_at_idx
+      columns:
+        - created_at
+      comment: "Index for faster message ordering"

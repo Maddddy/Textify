@@ -12,8 +12,22 @@ actions:
         type: uuid!
       - name: message
         type: String!
+    output_type: SendMessageResponse
+
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: SendMessageResponse
+      description: "Response from sendMessage action"
+      fields:
+        - name: success
+          type: Boolean!
+          description: "Whether the message was sent successfully"
+        - name: data
+          type: jsonb
+          description: "Response data from the webhook"
+        - name: error
+          type: String
+          description: "Error message if something went wrong"
   scalars: []

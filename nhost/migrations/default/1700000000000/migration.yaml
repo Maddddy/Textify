@@ -1,0 +1,10 @@
+version: 1
+name: create_chats_table
+up:
+  - exec:
+      sql: 1700000000000_create_chats_table.sql
+down:
+  - exec:
+      sql: |
+        DROP TABLE IF EXISTS "public"."chats" CASCADE;
+        DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;

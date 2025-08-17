@@ -1,0 +1,9 @@
+version: 1
+name: create_messages_table
+up:
+  - exec:
+      sql: 1700000000001_create_messages_table.sql
+down:
+  - exec:
+      sql: |
+        DROP TABLE IF EXISTS "public"."messages" CASCADE;

@@ -14,7 +14,7 @@ table:
       comment: "ID of the user who owns this chat"
     - name: title
       type: text
-      is_nullable: true
+      is_nullable: false
       comment: "Title of the chat conversation"
     - name: created_at
       type: timestamptz
@@ -44,3 +44,7 @@ table:
       columns:
         - user_id
       comment: "Index for faster user chat lookups"
+    - name: chats_updated_at_idx
+      columns:
+        - updated_at
+      comment: "Index for faster chat ordering"
