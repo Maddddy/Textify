@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd nhost && nhost up",
     "dev:frontend": "cd frontend && npm start",
-    "build": "cd frontend && npm run build",
+    "build": "cd frontend && npm install && npm run build",
     "setup": "npm install && cd frontend && npm install",
     "clean": "rimraf frontend/node_modules frontend/build nhost/.nhost",
     "reset": "npm run clean && npm run setup"
