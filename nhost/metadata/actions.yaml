@@ -2,7 +2,7 @@ actions:
   - name: sendMessage
     definition:
       kind: synchronous
-      handler: "{{NHOST_BACKEND_URL}}/functions/v1/sendMessage"
+      handler: "{{NHOST_FUNCTIONS_URL}}/sendMessage"
       forward_client_headers: true
     permissions:
       - role: user
