@@ -1,7 +1,7 @@
 // Webhook Configuration
 export const WEBHOOK_CONFIG = {
   // n8n webhook URL for chatbot functionality
-  N8N_WEBHOOK_URL: 'https://utsavsarda.app.n8n.cloud/webhook-test/62fde8f1-9622-4406-81a3-c478468cb997',
+  N8N_WEBHOOK_URL: 'https://utsavsarda.app.n8n.cloud/webhook/62fde8f1-9622-4406-81a3-c478468cb997',
   
   // API endpoints
   API_ENDPOINTS: {
