@@ -1,0 +1,9 @@
+type Mutation {
+  sendMessage(chat_id: uuid!, message: String!): SendMessageResponse
+}
+
+type SendMessageResponse {
+  success: Boolean!
+  data: JSON
+  error: String
+}
