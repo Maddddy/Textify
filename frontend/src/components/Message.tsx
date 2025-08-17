@@ -5,14 +5,14 @@ interface MessageProps {
   message: {
     id: string;
     content: string;
-    is_bot: boolean;
+    role: string;
     created_at: string;
     user_id: string;
   };
 }
 
 const Message: React.FC<MessageProps> = ({ message }) => {
-  const isBot = message.is_bot;
+  const isBot = message.role === 'assistant';
   const messageTime = new Date(message.created_at).toLocaleTimeString();
 
   return (

@@ -20,7 +20,7 @@ const ChatPage: React.FC = () => {
     <div className="chat-page">
       <header className="chat-header">
         <div className="header-content">
-          <h1 className="header-title">Testify Chatbot</h1>
+          <h1 className="header-title">Textify Chatbot</h1>
           <div className="header-actions">
             <button
               onClick={() => setShowNewChatModal(true)}
@@ -48,7 +48,7 @@ const ChatPage: React.FC = () => {
             <MessageView />
           ) : (
             <div className="welcome-message">
-              <h2>Welcome to Testify Chatbot!</h2>
+              <h2>Welcome to Textify Chatbot!</h2>
               <p>Start a new chat or select an existing one to begin.</p>
               <button
                 onClick={() => setShowNewChatModal(true)}
