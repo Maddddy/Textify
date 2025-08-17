@@ -4,12 +4,13 @@ import { gql } from '@apollo/client';
 import { useAuth } from './AuthContext';
 
 const GET_CHATS = gql`
-  query GetChats {
-    chats(order_by: { updated_at: desc }) {
+  query GetChats($user_id: uuid!) {
+    chats(where: { user_id: { _eq: $user_id } }, order_by: { updated_at: desc }) {
       id
       title
       created_at
       updated_at
+      user_id
     }
   }
 `;
@@ -19,20 +20,22 @@ const GET_MESSAGES = gql`
     messages(where: { chat_id: { _eq: $chat_id } }, order_by: { created_at: asc }) {
       id
       content
-      is_bot
+      role
       created_at
       user_id
+      chat_id
     }
   }
 `;
 
 const CREATE_CHAT = gql`
-  mutation CreateChat($title: String!) {
-    insert_chats_one(object: { title: $title }) {
+  mutation CreateChat($title: String!, $user_id: uuid!) {
+    insert_chats_one(object: { title: $title, user_id: $user_id }) {
       id
       title
       created_at
       updated_at
+      user_id
     }
   }
 `;
@@ -41,8 +44,8 @@ const SEND_MESSAGE = gql`
   mutation SendMessage($chat_id: uuid!, $message: String!) {
     sendMessage(chat_id: $chat_id, message: $message) {
       success
-      message
-      chat_id
+      data
+      error
     }
   }
 `;
@@ -52,14 +55,16 @@ interface Chat {
   title: string;
   created_at: string;
   updated_at: string;
+  user_id: string;
 }
 
 interface Message {
   id: string;
   content: string;
-  is_bot: boolean;
+  role: string;
   created_at: string;
   user_id: string;
+  chat_id: string;
 }
 
 interface ChatContextType {
@@ -88,13 +93,14 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
   // Query for chats
   const { data: chatsData, loading: chatsLoading, refetch: refetchChats } = useQuery(GET_CHATS, {
-    skip: !isAuthenticated,
+    variables: { user_id: user?.id || '' },
+    skip: !isAuthenticated || !user?.id,
     fetchPolicy: 'cache-and-network',
   });
 
@@ -116,16 +122,25 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   }, [messagesData]);
 
   const createChat = async (title: string) => {
+    if (!user?.id) {
+      console.error('User not authenticated');
+      return;
+    }
+
     try {
       const result = await createChatMutation({
-        variables: { title },
+        variables: { title, user_id: user.id },
         update: (cache, { data }) => {
           if (data?.insert_chats_one) {
-            const existingChats = cache.readQuery({ query: GET_CHATS });
+            const existingChats = cache.readQuery({ 
+              query: GET_CHATS, 
+              variables: { user_id: user.id } 
+            });
             if (existingChats && typeof existingChats === 'object' && 'chats' in existingChats) {
               const chats = (existingChats as any).chats || [];
               cache.writeQuery({
                 query: GET_CHATS,
+                variables: { user_id: user.id },
                 data: {
                   chats: [data.insert_chats_one, ...chats],
                 },
@@ -141,6 +156,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error('Error creating chat:', error);
+      throw error;
     }
   };
 
@@ -151,6 +167,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       });
     } catch (error) {
       console.error('Error sending message:', error);
+      throw error;
     }
   };
 

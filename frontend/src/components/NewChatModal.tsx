@@ -3,16 +3,27 @@ import './NewChatModal.css';
 
 interface NewChatModalProps {
   onClose: () => void;
-  onSubmit: (title: string) => void;
+  onSubmit: (title: string) => Promise<void>;
 }
 
 const NewChatModal: React.FC<NewChatModalProps> = ({ onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      onSubmit(title.trim());
+      setLoading(true);
+      setError('');
+      try {
+        await onSubmit(title.trim());
+        onClose();
+      } catch (err: any) {
+        setError(err.message || 'Failed to create chat');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -37,19 +48,22 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ onClose, onSubmit }) => {
               placeholder="Enter chat title..."
               className="form-input"
               autoFocus
+              disabled={loading}
             />
           </div>
           
+          {error && <div className="error-message">{error}</div>}
+          
           <div className="modal-actions">
-            <button type="button" onClick={onClose} className="cancel-button">
+            <button type="button" onClick={onClose} className="cancel-button" disabled={loading}>
               Cancel
             </button>
             <button
               type="submit"
-              disabled={!title.trim()}
+              disabled={!title.trim() || loading}
               className="create-button"
             >
-              Create Chat
+              {loading ? 'Creating...' : 'Create Chat'}
             </button>
           </div>
         </form>

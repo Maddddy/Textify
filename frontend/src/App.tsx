@@ -1,26 +1,33 @@
 import React from 'react';
-import { NhostProvider } from '@nhost/react';
-import { ApolloProvider } from '@apollo/client';
-import { nhost } from './lib/nhost';
-import client from './lib/apollo';
-import { AuthProvider } from './contexts/AuthContext';
-import { ChatProvider } from './contexts/ChatContext';
+import { useAuth } from './contexts/AuthContext';
 import AppRouter from './components/AppRouter';
 import './App.css';
 
 function App() {
+  const { isAuthenticated, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   return (
-    <NhostProvider nhost={nhost}>
-      <ApolloProvider client={client}>
-        <AuthProvider>
-          <ChatProvider>
-            <div className="App">
-              <AppRouter />
-            </div>
-          </ChatProvider>
-        </AuthProvider>
-      </ApolloProvider>
-    </NhostProvider>
+    <div className="App">
+      {isAuthenticated && (
+        <header className="App-header">
+          <h1>Textify Chatbot</h1>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
+        </header>
+      )}
+      <main className="App-main">
+        <AppRouter />
+      </main>
+    </div>
   );
 }
 

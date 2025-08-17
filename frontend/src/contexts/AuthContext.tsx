@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useAuthenticationStatus, useSignInEmailPassword, useSignUpEmailPassword, useSignOut } from '@nhost/react';
+import { useAuthenticationStatus, useSignInEmailPassword, useSignUpEmailPassword, useSignOut, useUserData } from '@nhost/react';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -30,8 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { signUpEmailPassword, isLoading: signUpLoading } = useSignUpEmailPassword();
   const { signOut: nhostSignOut } = useSignOut();
 
-  // Get user from Nhost context
-  const user = null; // We'll get this from the Nhost context if needed
+  const user = useUserData();
 
   const signIn = async (email: string, password: string) => {
     return await signInEmailPassword(email, password);
