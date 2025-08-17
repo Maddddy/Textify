@@ -38,6 +38,12 @@ cd testify
 
 ```bash
 cd nhost
+
+# Copy and configure environment variables
+cp env.example .secrets
+# Edit .secrets with your actual values
+
+# Start local services
 nhost up
 ```
 
@@ -46,6 +52,8 @@ This will start:
 - Hasura GraphQL engine
 - Nhost Auth service
 - Local development environment
+
+**Important**: Make sure to set `NHOST_BACKEND_URL` in your `.secrets` file. For local development, this is typically `http://localhost:8888` (check your `nhost up` output for the exact port).
 
 ### 3. Database Migration
 
@@ -65,6 +73,31 @@ npm start
 ```
 
 ### 5. Environment Configuration
+
+#### Backend Environment (.secrets in nhost directory)
+
+Create `.secrets` in the `nhost` directory:
+
+```env
+# Nhost Backend Configuration
+NHOST_BACKEND_URL=http://localhost:8888
+
+# Hasura Configuration
+HASURA_GRAPHQL_ADMIN_SECRET=your-hasura-admin-secret
+HASURA_GRAPHQL_JWT_SECRET=your-jwt-secret
+
+# Nhost Webhook Secret
+NHOST_WEBHOOK_SECRET=your-webhook-secret
+
+# Grafana Admin Password
+GRAFANA_ADMIN_PASSWORD=your-grafana-password
+
+# AI Integration
+OPENROUTER_API_KEY=your-openrouter-api-key
+N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chatbot-webhook
+```
+
+#### Frontend Environment (.env.local in frontend directory)
 
 Create `.env.local` in the frontend directory:
 
@@ -89,7 +122,9 @@ testify/
 ├── nhost/                    # Backend configuration
 │   ├── migrations/          # Database migrations
 │   ├── functions/           # Hasura Actions
-│   └── metadata/            # Hasura metadata
+│   ├── metadata/            # Hasura metadata
+│   ├── .secrets            # Backend environment variables
+│   └── env.example         # Environment template
 ├── frontend/                # React application
 │   ├── src/
 │   │   ├── components/      # React components
@@ -174,25 +209,38 @@ nhost push
 
 ## Environment Variables
 
-### Frontend (.env.local)
+### Backend (.secrets in nhost directory)
+- `NHOST_BACKEND_URL` - **REQUIRED**: Your functions base URL (local: http://localhost:8888, cloud: https://your-project.nhost.run)
+- `HASURA_GRAPHQL_ADMIN_SECRET` - Hasura admin secret
+- `HASURA_GRAPHQL_JWT_SECRET` - JWT signing secret
+- `NHOST_WEBHOOK_SECRET` - Nhost webhook secret
+- `GRAFANA_ADMIN_PASSWORD` - Grafana admin password
+- `OPENROUTER_API_KEY` - OpenRouter API key for AI responses
+- `N8N_WEBHOOK_URL` - n8n webhook endpoint
+
+### Frontend (.env.local in frontend directory)
 - `REACT_APP_NHOST_SUBDOMAIN` - Your Nhost subdomain
 - `REACT_APP_NHOST_REGION` - Nhost region
 - `REACT_APP_OPENROUTER_API_KEY` - OpenRouter API key
 - `REACT_APP_N8N_WEBHOOK_URL` - n8n webhook URL
 
-### Backend (Nhost)
-- `NHOST_ADMIN_SECRET` - Hasura admin secret
-- `N8N_WEBHOOK_URL` - n8n webhook endpoint
-- `OPENROUTER_API_KEY` - OpenRouter API key
-
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Authentication errors**: Check Nhost configuration and environment variables
-2. **GraphQL errors**: Verify Hasura is running and permissions are correct
-3. **n8n workflow failures**: Check webhook URL and API credentials
-4. **Database connection issues**: Ensure PostgreSQL is running
+1. **"Value for environment variables not found: NHOST_BACKEND_URL"**
+   - **Solution**: Add `NHOST_BACKEND_URL` to your `nhost/.secrets` file
+   - Set to `http://localhost:8888` for local development
+   - Check `nhost up` output for the correct port
+
+2. **"the type JSON for field data in object type SendMessageResponse does not exist"**
+   - **Solution**: The metadata has been fixed to use `String` instead of `jsonb`
+   - Run `nhost push` or `hasura metadata apply` to apply changes
+
+3. **Authentication errors**: Check Nhost configuration and environment variables
+4. **GraphQL errors**: Verify Hasura is running and permissions are correct
+5. **n8n workflow failures**: Check webhook URL and API credentials
+6. **Database connection issues**: Ensure PostgreSQL is running
 
 ### Debug Mode
 
@@ -206,6 +254,23 @@ const nhost = new NhostClient({
 });
 ```
 
+### Metadata Management
+
+If you need to modify Hasura metadata (actions, custom types, etc.):
+
+```bash
+cd nhost
+
+# Export current metadata
+hasura metadata export
+
+# After making changes, apply metadata
+hasura metadata apply
+
+# Or use nhost push (applies both migrations and metadata)
+nhost push
+```
+
 ## Contributing
 
 1. Fork the repository
@@ -213,6 +278,8 @@ const nhost = new NhostClient({
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
+
+**Security Note**: Never commit `.secrets` files or any files containing API keys or secrets. The `.secrets` file is already in `.gitignore` to prevent accidental commits.
 
 ## License
 
@@ -235,3 +302,8 @@ For support and questions:
 - AI chatbot integration
 - Responsive design
 - Security features
+
+### v1.0.1
+- Fixed Hasura action metadata inconsistency
+- Added proper environment variable documentation
+- Resolved NHOST_BACKEND_URL configuration issue
