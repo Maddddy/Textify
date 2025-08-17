@@ -1,5 +1,5 @@
 {
-  "name": "testify-chatbot",
+  "name": "textify",
   "version": "1.0.0",
   "description": "A modern chatbot application built with React, Nhost, Hasura, and n8n",
   "main": "index.js",
@@ -8,38 +8,18 @@
     "dev:backend": "cd nhost && nhost up",
     "dev:frontend": "cd frontend && npm start",
     "build": "cd frontend && npm run build",
-    "install:all": "npm install && cd frontend && npm install",
-    "setup": "npm run install:all && echo 'Setup complete! Run npm run dev to start development'",
-    "clean": "rm -rf frontend/node_modules frontend/build nhost/.nhost",
+    "setup": "npm install && cd frontend && npm install",
+    "clean": "rimraf frontend/node_modules frontend/build nhost/.nhost",
     "reset": "npm run clean && npm run setup"
   },
-  "keywords": [
-    "chatbot",
-    "react",
-    "nhost",
-    "hasura",
-    "graphql",
-    "n8n",
-    "openrouter",
-    "ai",
-    "chat",
-    "authentication"
-  ],
-  "author": "Your Name",
+  "keywords": [ "chatbot", "react", "nhost", "hasura", "graphql", "n8n", "openrouter", "ai", "chat", "authentication" ],
+  "author": "Utsav Sarda",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
   },
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/testify-chatbot.git"
-  },
-  "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/testify-chatbot/issues"
-  },
-  "homepage": "https://github.com/YOUR_USERNAME/testify-chatbot#readme"
+    "node": ">=16.0.0"
+  }
 }
