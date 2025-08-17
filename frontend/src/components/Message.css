@@ -1,5 +1,5 @@
 .message {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -14,55 +14,61 @@
 
 .message-content {
   max-width: 70%;
-  padding: 12px 16px;
-  border-radius: 18px;
+  padding: 16px 20px;
+  border-radius: 20px;
   position: relative;
   word-wrap: break-word;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .user-message .message-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
   color: white;
-  border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
 }
 
 .bot-message .message-content {
-  background: white;
-  color: #333;
-  border: 1px solid #e1e5e9;
-  border-bottom-left-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgba(31, 41, 55, 0.9);
+  backdrop-filter: blur(20px);
+  color: #e0e0e0;
+  border: 1px solid #2d2d4f;
+  border-bottom-left-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .message-text {
   font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 4px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  font-weight: 400;
 }
 
 .message-time {
   font-size: 11px;
-  opacity: 0.7;
+  opacity: 0.8;
   text-align: right;
+  font-weight: 500;
 }
 
 .user-message .message-time {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .bot-message .message-time {
-  color: #999;
+  color: #a0a0a0;
 }
 
 /* Typing indicator for bot messages */
 .message.bot-message.typing .message-content {
-  background: #f0f0f0;
-  border: 1px solid #ddd;
+  background: rgba(31, 41, 55, 0.7);
+  border: 1px solid #374151;
 }
 
 .message.bot-message.typing .message-text::after {
   content: '...';
   animation: typing 1.5s infinite;
+  color: #7c3aed;
 }
 
 @keyframes typing {
@@ -75,7 +81,7 @@
 @media (max-width: 768px) {
   .message-content {
     max-width: 85%;
-    padding: 10px 14px;
+    padding: 14px 18px;
   }
   
   .message-text {
@@ -90,7 +96,7 @@
 @media (max-width: 480px) {
   .message-content {
     max-width: 90%;
-    padding: 8px 12px;
+    padding: 12px 16px;
   }
   
   .message-text {
