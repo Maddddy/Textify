@@ -4,7 +4,7 @@ import { onError } from '@apollo/client/link/error';
 
 // Create HTTP link
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_NHOST_GRAPHQL_URL || 'https://ngohqqjacrhoomctvvwt.us-east-1.nhost.run/v1/graphql',
+  uri: process.env.REACT_APP_NHOST_GRAPHQL_URL || 'http://localhost:8080/v1/graphql',
 });
 
 // Auth link to add headers
