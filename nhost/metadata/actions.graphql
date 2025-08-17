@@ -4,6 +4,6 @@ type Mutation {
 
 type SendMessageResponse {
   success: Boolean!
-  data: JSON
+  data: jsonb
   error: String
 }
