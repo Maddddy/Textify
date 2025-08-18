@@ -21,7 +21,8 @@ ALTER TABLE "public"."chats" ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies
 CREATE POLICY "Users can view their own chats" ON "public"."chats"
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING (current_setting('request.headers.x-hasura-user-id')::uuid = user_id)
+;
 
 CREATE POLICY "Users can insert their own chats" ON "public"."chats"
   FOR INSERT WITH CHECK (auth.uid() = user_id);
