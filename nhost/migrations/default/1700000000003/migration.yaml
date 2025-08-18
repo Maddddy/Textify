@@ -1,0 +1,8 @@
+version: "1.0"
+name: "create_chats_and_messages"
+up:
+  - 1700000000003_create_chats_and_messages.sql
+down:
+  - DROP TABLE IF EXISTS public.messages;
+  - DROP TABLE IF EXISTS public.chats;
+  - DROP FUNCTION IF EXISTS update_updated_at_column();
