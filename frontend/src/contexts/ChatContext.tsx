@@ -124,8 +124,11 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const createChat = async (title: string) => {
     if (!user?.id) {
       console.error('User not authenticated');
-      return;
+      throw new Error('User not authenticated');
     }
+
+    console.log('Creating chat with title:', title, 'for user:', user.id);
+    console.log('GraphQL URL:', process.env.REACT_APP_NHOST_GRAPHQL_URL);
 
     try {
       const result = await createChatMutation({
@@ -150,13 +153,30 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         },
       });
       
+      console.log('Chat creation result:', result);
+      
       if (result.data?.insert_chats_one) {
         setCurrentChat(result.data.insert_chats_one);
         setMessages([]);
+      } else {
+        console.error('No chat data returned from mutation');
+        throw new Error('Failed to create chat: No data returned');
       }
     } catch (error) {
       console.error('Error creating chat:', error);
-      throw error;
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          throw new Error('Network error: Unable to connect to the server. Please check your internet connection and try again.');
+        } else if (error.message.includes('Unauthorized')) {
+          throw new Error('Authentication error: Please sign in again.');
+        } else {
+          throw new Error(`Failed to create chat: ${error.message}`);
+        }
+      } else {
+        throw new Error('An unexpected error occurred while creating the chat.');
+      }
     }
   };
 
